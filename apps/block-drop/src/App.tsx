@@ -106,6 +106,7 @@ export default function App(): React.JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wheelAcc = useRef(0);
   const lastKnobPress = useRef(0);
+  const escTimer = useRef<number | null>(null);
   const touchRef = useRef<{ x: number; y: number; t: number } | null>(null);
   const dasRef = useRef<{ dir: -1 | 1; next: number } | null>(null);
 
@@ -278,9 +279,14 @@ export default function App(): React.JSX.Element {
       if (e.key === 'Escape') {
         e.preventDefault();
         if (screen === 'game' && g) {
-          if (g.over) quitToMenu();
-          else if (g.paused) quitToMenu();
-          else g.togglePause();
+          if (g.over || g.paused) { quitToMenu(); return; }
+          if (e.repeat) return;
+          // short press = hard drop, long press (hold 600ms) = exit to menu
+          if (escTimer.current !== null) clearTimeout(escTimer.current);
+          escTimer.current = window.setTimeout(() => {
+            escTimer.current = null;
+            quitToMenu();
+          }, 600);
         }
         return;
       }
@@ -322,17 +328,30 @@ export default function App(): React.JSX.Element {
       const dx = e.deltaX !== 0 ? e.deltaX : e.deltaY;
       if (dx === 0) return;
       e.preventDefault();
+      // one detent = exactly one column: accumulate to the detent threshold,
+      // step a single column, then reset — never jump multiple columns
       wheelAcc.current += dx;
       const step = 24;
-      while (Math.abs(wheelAcc.current) >= step) {
+      if (Math.abs(wheelAcc.current) >= step) {
         g.move(wheelAcc.current > 0 ? 1 : -1);
-        wheelAcc.current -= Math.sign(wheelAcc.current) * step;
+        wheelAcc.current = 0;
+      }
+    };
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && escTimer.current !== null) {
+        // released before the long-press fired: short press = hard drop
+        clearTimeout(escTimer.current);
+        escTimer.current = null;
+        const g = gameRef.current;
+        if (g && screen === 'game' && !g.paused && !g.over) g.hardDrop();
       }
     };
     window.addEventListener('keydown', onKey);
+    window.addEventListener('keyup', onKeyUp);
     window.addEventListener('wheel', onWheel, { passive: false });
     return () => {
       window.removeEventListener('keydown', onKey);
+      window.removeEventListener('keyup', onKeyUp);
       window.removeEventListener('wheel', onWheel);
     };
   }, [screen, mode, startGame, quitToMenu]);
@@ -397,7 +416,7 @@ export default function App(): React.JSX.Element {
           })}
         </div>
         <div className="mt-8 text-small text-dim">
-          knob: move · knob press: rotate · swipe down: drop · esc: pause
+          knob: move · knob press: rotate · swipe down: drop · esc: drop · hold esc: exit
         </div>
       </div>
     );
@@ -487,7 +506,7 @@ export default function App(): React.JSX.Element {
           <button className={`${btn} h-16 flex-1 text-body`} onPointerDown={e => { e.preventDefault(); g.togglePause(); }}>II</button>
         </div>
         <div className="mt-1 text-center text-tiny leading-relaxed text-dim">
-          knob: move · press: rotate<br />1-3: mode · 4: pause · esc: back
+          knob: move · press: rotate<br />1-3: mode · 4: pause · esc: drop · hold: exit
         </div>
       </div>
 

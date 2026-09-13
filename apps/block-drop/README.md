@@ -14,11 +14,12 @@ big touch targets designed for the 800x480 screen.
 
 | Input | Action |
 | ----- | ------ |
-| Rotary knob | move the piece left / right |
+| Rotary knob | move the piece one column per detent |
 | Knob press | rotate |
 | Presets 1-3 | Classic / Sprint / Ultra |
 | Preset 4 | pause |
-| Escape | pause, then back to menu |
+| Esc (short press) | hard drop |
+| Esc (long press) | exit to menu |
 | Swipe down on the board | hard drop |
 | Tap the board | rotate |
 | On-screen buttons | rotate, move, drop, hold, pause |

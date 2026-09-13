@@ -1,5 +1,11 @@
 # Block Drop
 
+## 0.1.1
+
+- New icon: 3×3 gradient grid with a bright inverted-T over dimmed tiles.
+- Knob: one detent now moves the piece exactly one column (large wheel events can't jump multiple columns).
+- Esc: short press hard-drops, long press (~600 ms) exits to menu.
+
 ## 0.1.0
 
 - First release: Classic (endless), Sprint (40 lines), and Ultra (2 minutes).

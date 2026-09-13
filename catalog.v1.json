@@ -1,7 +1,7 @@
 {
   "$schema": "https://apps.bridgething.com/schemas/catalog/v1.json",
   "schema": "catalog.v1",
-  "updated_at": "2026-09-13T02:42:43.787Z",
+  "updated_at": "2026-09-13T03:35:21.355Z",
   "repo": {
     "name": "Block Drop",
     "description": "Block Drop for the Spotify Car Thing.",
@@ -24,16 +24,16 @@
       "source": "https://github.com/dharmapoudel/bridgething-block-drop",
       "versions": [
         {
-          "version": "0.1.0",
-          "released_at": "2026-09-13T02:42:43.783Z",
+          "version": "0.1.1",
+          "released_at": "2026-09-13T03:35:21.353Z",
           "download": {
-            "url": "https://dharmapoudel.github.io/bridgething-block-drop-source/r/01a0989a-bd39-7de6-9314-16769a9163d7/0.1.0.zip",
-            "size": 852757,
-            "sha256": "bd545b7ce30c063a02c6b34fa65222fea28efcc01ba0e55c373c38aef70bcb96"
+            "url": "https://dharmapoudel.github.io/bridgething-block-drop-source/r/01a0989a-bd39-7de6-9314-16769a9163d7/0.1.1.zip",
+            "size": 897911,
+            "sha256": "e08ad2ae4474d8acc69c0195658a8c5fe19b2c83e32db601b21be4a1e0a9f946"
           },
           "permissions": [],
           "min_libbridgething_version": "0.12.1",
-          "changelog": "- First release: Classic (endless), Sprint (40 lines), and Ultra (2 minutes).\n- Guideline-style rules: 7-bag, SRS wall kicks, lock delay, hold, ghost piece.\n- Knob-first controls: rotate the knob to move, press it to rotate.\n- Big touch targets: rotate / move / drop / hold / pause buttons.\n- Best scores persist on the device."
+          "changelog": "- New icon: 3×3 gradient grid with a bright inverted-T over dimmed tiles.\n- Knob: one detent now moves the piece exactly one column (large wheel events can't jump multiple columns).\n- Esc: short press hard-drops, long press (~600 ms) exits to menu."
         }
       ]
     }

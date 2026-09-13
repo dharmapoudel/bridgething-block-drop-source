@@ -1,7 +1,7 @@
 {
   "$schema": "https://apps.bridgething.com/schemas/catalog/v1.json",
   "schema": "catalog.v1",
-  "updated_at": "2026-09-13T03:35:21.355Z",
+  "updated_at": "2026-09-13T03:38:18.724Z",
   "repo": {
     "name": "Block Drop",
     "description": "Block Drop for the Spotify Car Thing.",
@@ -12,7 +12,7 @@
     {
       "id": "01a0989a-bd39-7de6-9314-16769a9163d7",
       "name": "Block Drop",
-      "description": "A tiny Tetris-style falling-block game for the Car Thing. Classic, Sprint, and Ultra modes with knob-first controls.",
+      "description": "A tiny falling-block game for the Car Thing. Classic, Sprint, and Ultra modes with knob-first controls.",
       "author": "Akshar Patel",
       "icon": "https://dharmapoudel.github.io/bridgething-block-drop-source/icons/01a0989a-bd39-7de6-9314-16769a9163d7.png",
       "screenshots": [

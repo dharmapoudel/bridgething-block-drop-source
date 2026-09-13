@@ -1,0 +1,42 @@
+{
+  "$schema": "https://apps.bridgething.com/schemas/catalog/v1.json",
+  "schema": "catalog.v1",
+  "updated_at": "2026-09-13T02:42:43.787Z",
+  "repo": {
+    "name": "Block Drop",
+    "description": "Block Drop for the Spotify Car Thing.",
+    "homepage": "https://github.com/dharmapoudel/bridgething-block-drop-source",
+    "icon": null
+  },
+  "apps": [
+    {
+      "id": "01a0989a-bd39-7de6-9314-16769a9163d7",
+      "name": "Block Drop",
+      "description": "A tiny Tetris-style falling-block game for the Car Thing. Classic, Sprint, and Ultra modes with knob-first controls.",
+      "author": "Akshar Patel",
+      "icon": "https://dharmapoudel.github.io/bridgething-block-drop-source/icons/01a0989a-bd39-7de6-9314-16769a9163d7.png",
+      "screenshots": [
+        "https://dharmapoudel.github.io/bridgething-block-drop-source/screenshots/01a0989a-bd39-7de6-9314-16769a9163d7/01-menu.png",
+        "https://dharmapoudel.github.io/bridgething-block-drop-source/screenshots/01a0989a-bd39-7de6-9314-16769a9163d7/02-game.png",
+        "https://dharmapoudel.github.io/bridgething-block-drop-source/screenshots/01a0989a-bd39-7de6-9314-16769a9163d7/03-gameover.png"
+      ],
+      "homepage": "https://github.com/dharmapoudel/bridgething-block-drop",
+      "source": "https://github.com/dharmapoudel/bridgething-block-drop",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "released_at": "2026-09-13T02:42:43.783Z",
+          "download": {
+            "url": "https://dharmapoudel.github.io/bridgething-block-drop-source/r/01a0989a-bd39-7de6-9314-16769a9163d7/0.1.0.zip",
+            "size": 852757,
+            "sha256": "bd545b7ce30c063a02c6b34fa65222fea28efcc01ba0e55c373c38aef70bcb96"
+          },
+          "permissions": [],
+          "min_libbridgething_version": "0.12.1",
+          "changelog": "- First release: Classic (endless), Sprint (40 lines), and Ultra (2 minutes).\n- Guideline-style rules: 7-bag, SRS wall kicks, lock delay, hold, ghost piece.\n- Knob-first controls: rotate the knob to move, press it to rotate.\n- Big touch targets: rotate / move / drop / hold / pause buttons.\n- Best scores persist on the device."
+        }
+      ]
+    }
+  ],
+  "recommended_sources": []
+}

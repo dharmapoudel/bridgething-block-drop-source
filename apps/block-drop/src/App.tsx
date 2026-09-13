@@ -277,8 +277,9 @@ export default function App(): React.JSX.Element {
         return;
       }
       if (e.key === 'Escape') {
-        e.preventDefault();
+        // on the menu, let the event through so the platform back button exits the app
         if (screen === 'game' && g) {
+          e.preventDefault();
           if (g.over || g.paused) { quitToMenu(); return; }
           if (e.repeat) return;
           // short press = hard drop, long press (hold 600ms) = exit to menu
@@ -350,6 +351,7 @@ export default function App(): React.JSX.Element {
     window.addEventListener('keyup', onKeyUp);
     window.addEventListener('wheel', onWheel, { passive: false });
     return () => {
+      if (escTimer.current !== null) { clearTimeout(escTimer.current); escTimer.current = null; }
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('keyup', onKeyUp);
       window.removeEventListener('wheel', onWheel);
@@ -390,7 +392,7 @@ export default function App(): React.JSX.Element {
     return (
       <div className="flex h-screen w-screen flex-col items-center justify-center bg-screen font-body select-none">
         <div className="rise mb-1 font-display text-hero font-extrabold tracking-tight text-fg">BLOCK DROP</div>
-        <div className="mb-8 text-body text-dim">a tiny tetris for the car thing</div>
+        <div className="mb-8 text-body text-dim">a tiny falling-block game for the car thing</div>
         <div className="flex gap-4">
           {MODES.map((m, i) => {
             const best = bests[m.id];

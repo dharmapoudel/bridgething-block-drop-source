@@ -1,6 +1,6 @@
 # Block Drop
 
-A tiny Tetris-style falling-block game for the Spotify Car Thing, built for
+A tiny falling-block game for the Spotify Car Thing, built for
 [bridgething](https://bridgething.com). Three modes, knob-first controls, and
 big touch targets designed for the 800x480 screen.
 

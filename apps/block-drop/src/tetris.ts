@@ -1,4 +1,4 @@
-// Block Drop engine: guideline-style tetris (7-bag, SRS kicks, lock delay).
+// Block Drop engine: guideline-style falling blocks (7-bag, SRS kicks, lock delay).
 // Pure logic, no DOM. Coordinates: x right, y down, board 10 wide x 22 tall
 // (top two rows are hidden spawn space).
 

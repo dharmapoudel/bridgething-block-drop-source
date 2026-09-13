@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  src: url("./fonts/Outfit-Variable.ttf") format("truetype-variations");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  src: url("./fonts/Inter-Variable.ttf") format("truetype-variations");
+}
+
+@theme {
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --color-off-white: #efefef;
+  --color-bg: #0a0c0e;
+  --color-screen: #060809;
+  --color-fg: #efefef;
+  --color-muted: #a7adb5;
+  --color-accent: #22d3ee;
+  --color-ok: #3ddc84;
+  --color-err: #f87171;
+  --color-warn: #facc15;
+
+  --color-rule: color-mix(in srgb, var(--color-fg) 10%, transparent);
+  --color-rule-strong: color-mix(in srgb, var(--color-fg) 16%, transparent);
+  --color-edge: color-mix(in srgb, var(--color-fg) 25%, transparent);
+  --color-dim: color-mix(in srgb, var(--color-fg) 35%, transparent);
+  --color-soft: color-mix(in srgb, var(--color-fg) 55%, transparent);
+  --color-near: color-mix(in srgb, var(--color-fg) 80%, transparent);
+
+  --color-accent-soft: color-mix(in srgb, var(--color-accent) 14%, transparent);
+
+  --text-hero: 64px;
+  --text-title: 34px;
+  --text-body: 20px;
+  --text-small: 15px;
+  --text-tiny: 12px;
+}
+
+html, body {
+  background: var(--color-screen);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  overscroll-behavior: none;
+}
+
+/* chunky press feedback that works without :active transform utilities */
+.pressable { transition: transform 90ms ease, background-color 120ms ease; }
+.pressable:active { transform: scale(0.96); }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 320ms ease both; }
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.pulse-soft { animation: pulse-soft 1.2s ease-in-out infinite; }

@@ -436,7 +436,7 @@ export default function App(): React.JSX.Element {
 
   if (screen === 'menu') {
     return (
-      <div className="flex h-screen w-screen flex-col items-center justify-center bg-screen font-body select-none">
+      <div className={`flex ${portrait ? 'h-full w-full' : 'h-screen w-screen'} flex-col items-center justify-center bg-screen font-body select-none`}>
         <div className={`rise mb-1 font-display font-extrabold tracking-tight text-fg ${portrait ? 'text-[52px]' : 'text-hero'}`}>BLOCK DROP</div>
         <div className="mb-8 text-body text-dim">a tiny falling-block game for the car thing</div>
         <div className={portrait ? 'flex flex-col items-center gap-4' : 'flex gap-4'}>
@@ -484,7 +484,7 @@ export default function App(): React.JSX.Element {
   // because the daemon pins the layout viewport at 800x480 and rotates the panel.
   if (portrait) {
     return (
-      <div className="flex h-screen w-screen flex-col bg-screen font-body select-none">
+      <div className="relative flex h-full w-full flex-col bg-screen font-body select-none">
         {/* hero: playfield centered in the middle */}
         <div className="flex min-h-0 flex-1 items-center justify-center px-4 pt-3">
           <div

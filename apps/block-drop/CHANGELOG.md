@@ -1,5 +1,10 @@
 # Block Drop
 
+## 0.1.4
+
+- Fixed the portrait layout on the device: the daemon pins the page to a 480x800 layout box while the viewport stays 800x480, so the viewport-unit roots (w-screen/h-screen) rendered an 800x480 strip. Portrait roots now fill the pinned body instead, and the pause/game-over overlay is anchored to the portrait layout.
+- Landscape (800x480) layout is unchanged.
+
 ## 0.1.3
 
 - Fixed portrait detection on the device: the kiosk pins the layout viewport at 800x480 and rotates the panel, so the old CSS orientation query never fired — portrait is now detected via screen.orientation (same approach as Calendar 0.1.7).

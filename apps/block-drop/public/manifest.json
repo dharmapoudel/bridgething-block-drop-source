@@ -1,1 +1,13 @@
-{"art":{"heroPx":248,"thumbPx":96},"config":[],"description":"A tiny falling-block game for the Car Thing. Classic, Sprint, and Ultra modes with knob-first controls.","icon":"icon.png","id":"01a0989a-bd39-7de6-9314-16769a9163d7","name":"Block Drop","permissions":[],"version":"0.1.2"}
+{
+  "art": {
+    "heroPx": 248,
+    "thumbPx": 96
+  },
+  "config": [],
+  "description": "A tiny falling-block game for the Car Thing. Classic, Sprint, and Ultra modes with knob-first controls.",
+  "icon": "icon.png",
+  "id": "01a0989a-bd39-7de6-9314-16769a9163d7",
+  "name": "Block Drop",
+  "permissions": [],
+  "version": "0.1.3"
+}

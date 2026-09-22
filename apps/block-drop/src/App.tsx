@@ -97,18 +97,47 @@ function drawPieceMini(
   }
 }
 
-// portrait (480x800) vs landscape (800x480): the kiosk reports real window
-// dimensions, so the orientation media query is the source of truth.
-function usePortrait(): boolean {
-  const [portrait, setPortrait] = useState(
-    () => typeof window !== 'undefined' && window.innerHeight >= window.innerWidth,
-  );
+// Portrait detection: the daemon pins the layout viewport at 800x480 and
+// rotates the panel, so CSS (orientation: portrait) and Tailwind portrait:
+// variants never match on-device. screen.orientation does report the rotated
+// orientation (portraitSecondary at 270 deg), so check it first and keep
+// matchMedia as the fallback (same approach as Calendar 0.1.7 / Radio 0.6.6).
+function detectPortrait(): boolean {
+  try {
+    if (screen.orientation?.type.startsWith('portrait')) return true;
+  } catch {
+    /* older webview */
+  }
+  try {
+    if (window.matchMedia('(orientation: portrait)').matches) return true;
+  } catch {
+    /* no matchMedia */
+  }
+  return false;
+}
+
+function useIsPortrait(): boolean {
+  const [portrait, setPortrait] = useState(detectPortrait);
   useEffect(() => {
-    const mq = window.matchMedia('(orientation: portrait)');
-    const onChange = (): void => setPortrait(mq.matches);
-    mq.addEventListener('change', onChange);
-    setPortrait(mq.matches);
-    return () => mq.removeEventListener('change', onChange);
+    const update = (): void => setPortrait(detectPortrait());
+    let orientation: ScreenOrientation | null = null;
+    let mq: MediaQueryList | null = null;
+    try {
+      orientation = screen.orientation;
+      orientation.addEventListener('change', update);
+      mq = window.matchMedia('(orientation: portrait)');
+      mq.addEventListener('change', update);
+    } catch {
+      /* listeners unavailable */
+    }
+    return () => {
+      try {
+        orientation?.removeEventListener('change', update);
+        mq?.removeEventListener('change', update);
+      } catch {
+        /* ignore */
+      }
+    };
   }, []);
   return portrait;
 }
@@ -125,7 +154,7 @@ export default function App(): React.JSX.Element {
   const escTimer = useRef<number | null>(null);
   const touchRef = useRef<{ x: number; y: number; t: number } | null>(null);
   const dasRef = useRef<{ dir: -1 | 1; next: number } | null>(null);
-  const portrait = usePortrait();
+  const portrait = useIsPortrait();
 
   const game = gameRef.current;
 
@@ -408,16 +437,16 @@ export default function App(): React.JSX.Element {
   if (screen === 'menu') {
     return (
       <div className="flex h-screen w-screen flex-col items-center justify-center bg-screen font-body select-none">
-        <div className="rise mb-1 font-display text-hero font-extrabold tracking-tight text-fg portrait:text-[52px]">BLOCK DROP</div>
+        <div className={`rise mb-1 font-display font-extrabold tracking-tight text-fg ${portrait ? 'text-[52px]' : 'text-hero'}`}>BLOCK DROP</div>
         <div className="mb-8 text-body text-dim">a tiny falling-block game for the car thing</div>
-        <div className="flex gap-4 portrait:flex-col portrait:items-center">
+        <div className={portrait ? 'flex flex-col items-center gap-4' : 'flex gap-4'}>
           {MODES.map((m, i) => {
             const best = bests[m.id];
             return (
               <button
                 key={m.id}
                 onClick={() => startGame(m.id)}
-                className="pressable flex h-52 w-56 flex-col items-start justify-between rounded-2xl border border-rule-strong bg-bg p-5 text-left portrait:h-40 portrait:w-[min(88vw,380px)] portrait:p-4"
+                className={portrait ? 'pressable flex h-40 w-[min(88vw,380px)] flex-col items-start justify-between rounded-2xl border border-rule-strong bg-bg p-4 text-left' : 'pressable flex h-52 w-56 flex-col items-start justify-between rounded-2xl border border-rule-strong bg-bg p-5 text-left'}
               >
                 <div>
                   <div className="font-display text-title font-bold text-fg">{m.name}</div>
@@ -434,7 +463,7 @@ export default function App(): React.JSX.Element {
             );
           })}
         </div>
-        <div className="mt-8 text-small text-dim portrait:px-6 portrait:text-center">
+        <div className={`mt-8 text-small text-dim ${portrait ? 'px-6 text-center' : ''}`}>
           knob: move · knob press: rotate · swipe down: drop · esc: drop · hold esc: exit
         </div>
       </div>
@@ -451,39 +480,13 @@ export default function App(): React.JSX.Element {
   const btn = 'pressable flex items-center justify-center rounded-xl border border-rule-strong bg-bg font-display font-bold text-fg';
 
   // ---- portrait (480x800): vertical reflow; landscape below is untouched ----
+  // gated on the JS detectPortrait() state (screen.orientation), never on CSS,
+  // because the daemon pins the layout viewport at 800x480 and rotates the panel.
   if (portrait) {
     return (
       <div className="flex h-screen w-screen flex-col bg-screen font-body select-none">
-        {/* top: compact stats strip */}
-        <div className="flex w-full items-end justify-between gap-2 px-4 pt-3">
-          <div className="shrink-0">
-            <div className="font-display text-[20px] font-extrabold leading-none tracking-tight text-fg">BLOCK<br />DROP</div>
-            <div className="mt-1 text-tiny font-bold tracking-widest text-accent">{modeLabel}</div>
-          </div>
-          <div>
-            <div className="text-tiny font-bold tracking-widest text-dim">SCORE</div>
-            <div className="font-display text-[22px] font-bold tabular-nums text-fg">{g.score.toLocaleString()}</div>
-          </div>
-          <div>
-            <div className="text-tiny font-bold tracking-widest text-dim">{statName}</div>
-            <div className="font-display text-[22px] font-bold tabular-nums text-fg">{statValue}</div>
-          </div>
-          {g.mode === 'classic' && (
-            <div>
-              <div className="text-tiny font-bold tracking-widest text-dim">LEVEL</div>
-              <div className="font-display text-[22px] font-bold tabular-nums text-fg">{g.level}</div>
-            </div>
-          )}
-          <div>
-            <div className="text-tiny font-bold tracking-widest text-dim">BEST</div>
-            <div className="text-[18px] font-semibold tabular-nums text-muted">
-              {bests[g.mode] === null ? '—' : g.mode === 'sprint' ? fmtTime(bests[g.mode]!) : bests[g.mode]!.toLocaleString()}
-            </div>
-          </div>
-        </div>
-
-        {/* middle: playfield + hold/next beside it */}
-        <div className="flex flex-1 items-center justify-center gap-4 px-3 py-2">
+        {/* hero: playfield centered in the middle */}
+        <div className="flex min-h-0 flex-1 items-center justify-center px-4 pt-3">
           <div
             className="relative rounded-lg border border-rule-strong bg-bg"
             style={{ width: PW + 2, height: PH + 2, touchAction: 'none' }}
@@ -492,37 +495,65 @@ export default function App(): React.JSX.Element {
           >
             <canvas ref={canvasRef} style={{ width: PW, height: PH }} className="m-[1px] block" />
           </div>
-          <div className="flex shrink-0 flex-col items-center justify-center gap-3">
+        </div>
+
+        {/* below the playfield: score strip */}
+        <div className="flex w-full items-end justify-between gap-2 px-4 pt-2">
+          <div className="shrink-0">
+            <div className="font-display text-[18px] font-extrabold leading-none tracking-tight text-fg">BLOCK<br />DROP</div>
+            <div className="mt-1 text-tiny font-bold tracking-widest text-accent">{modeLabel}</div>
+          </div>
+          <div>
+            <div className="text-tiny font-bold tracking-widest text-dim">SCORE</div>
+            <div className="font-display text-[20px] font-bold tabular-nums text-fg">{g.score.toLocaleString()}</div>
+          </div>
+          <div>
+            <div className="text-tiny font-bold tracking-widest text-dim">{statName}</div>
+            <div className="font-display text-[20px] font-bold tabular-nums text-fg">{statValue}</div>
+          </div>
+          {g.mode === 'classic' && (
             <div>
-              <div className="mb-1 text-center text-tiny font-bold tracking-widest text-dim">HOLD</div>
-              <MiniBox kind={g.holdKind} dim={!g.canHold} onTap={() => g.hold()} />
+              <div className="text-tiny font-bold tracking-widest text-dim">LEVEL</div>
+              <div className="font-display text-[20px] font-bold tabular-nums text-fg">{g.level}</div>
             </div>
-            <div>
-              <div className="mb-1 text-center text-tiny font-bold tracking-widest text-dim">NEXT</div>
-              <div className="flex flex-col gap-2">
-                {g.queue.slice(0, 3).map((k, i) => (
-                  <MiniBox key={i} kind={k} dim={i > 0} />
-                ))}
-              </div>
+          )}
+          <div>
+            <div className="text-tiny font-bold tracking-widest text-dim">BEST</div>
+            <div className="text-[16px] font-semibold tabular-nums text-muted">
+              {bests[g.mode] === null ? '—' : g.mode === 'sprint' ? fmtTime(bests[g.mode]!) : bests[g.mode]!.toLocaleString()}
             </div>
           </div>
         </div>
 
-        {/* bottom: compact controls */}
-        <div className="w-full px-4 pb-4">
+        {/* hold + next in one row */}
+        <div className="flex w-full items-start justify-center gap-4 px-4 pt-2">
+          <div>
+            <div className="mb-1 text-center text-tiny font-bold tracking-widest text-dim">HOLD</div>
+            <MiniBox kind={g.holdKind} dim={!g.canHold} onTap={() => g.hold()} />
+          </div>
+          <div>
+            <div className="mb-1 text-center text-tiny font-bold tracking-widest text-dim">NEXT</div>
+            <div className="flex gap-2">
+              {g.queue.slice(0, 3).map((k, i) => (
+                <MiniBox key={i} kind={k} dim={i > 0} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* bottom: control buttons */}
+        <div className="w-full px-4 pb-4 pt-2">
           <div className="flex gap-3">
-            <button className={`${btn} h-16 flex-1 text-[20px]`} onPointerDown={e => { e.preventDefault(); g.rotate(); }}>
+            <button className={`${btn} h-14 flex-1 text-[20px]`} onPointerDown={e => { e.preventDefault(); g.rotate(); }}>
               ⟳ ROTATE
             </button>
-            <button className={`${btn} h-16 flex-1 text-[20px]`} onPointerDown={e => { e.preventDefault(); g.hardDrop(); }}>
+            <button className={`${btn} h-14 flex-1 text-[20px]`} onPointerDown={e => { e.preventDefault(); g.hardDrop(); }}>
               ⤓ DROP
             </button>
           </div>
           <div className="mt-3 flex gap-3">
-            <button className={`${btn} h-16 flex-1 text-[24px]`} {...holdMove(-1)}>◀</button>
-            <button className={`${btn} h-16 flex-1 text-[24px]`} {...holdMove(1)}>▶</button>
-          </div>
-          <div className="mt-3 flex gap-3">
+            <button className={`${btn} h-14 flex-1 text-[22px]`} {...holdMove(-1)}>◀</button>
+            <button className={`${btn} h-14 flex-1 text-[22px]`} {...holdMove(1)}>▶</button>
             <button className={`${btn} h-14 flex-1 text-body`} onPointerDown={e => { e.preventDefault(); g.hold(); }}>HOLD</button>
             <button className={`${btn} h-14 flex-1 text-body`} onPointerDown={e => { e.preventDefault(); g.togglePause(); }}>II</button>
           </div>

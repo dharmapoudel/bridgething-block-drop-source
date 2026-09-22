@@ -1,5 +1,11 @@
 # Block Drop
 
+## 0.1.2
+
+- Portrait mode (480x800): the game screen now reflows vertically - compact stats strip on top, playfield with hold/next beside it, and touch controls in easy reach below.
+- Portrait mode menu: the three mode cards stack vertically so they fit the narrow screen.
+- Landscape (800x480) layout is unchanged.
+
 ## 0.1.1
 
 - New icon: 3×3 gradient grid with a bright inverted-T over dimmed tiles.

@@ -156,6 +156,21 @@ export default function App(): React.JSX.Element {
   const dasRef = useRef<{ dir: -1 | 1; next: number } | null>(null);
   const portrait = useIsPortrait();
 
+  // The daemon rotation script pins html/body to 480x800 and CSS-rotates html
+  // in portrait, but if the body pin loses a race (script runs before body
+  // exists and the re-pin never lands), h-full/w-full resolve against the
+  // 800x480 viewport and the portrait layout mispositions. Pin it here too;
+  // harmless when the daemon already did it.
+  useEffect(() => {
+    if (portrait) {
+      document.body.style.width = '480px';
+      document.body.style.height = '800px';
+    } else {
+      document.body.style.width = '';
+      document.body.style.height = '';
+    }
+  }, [portrait]);
+
   const game = gameRef.current;
 
   useEffect(() => {

@@ -1,5 +1,10 @@
 # Block Drop
 
+## 0.1.5
+
+- Fixed the portrait layout mispositioning on-device: the daemon's rotation script CSS-transforms the page but the body pin to 480x800 can lose a race, leaving h-full/w-full resolving against the 800x480 viewport. The app now pins the body to 480x800 itself in portrait mode (harmless when the daemon already did it).
+- Landscape (800x480) layout is unchanged.
+
 ## 0.1.4
 
 - Fixed the portrait layout on the device: the daemon pins the page to a 480x800 layout box while the viewport stays 800x480, so the viewport-unit roots (w-screen/h-screen) rendered an 800x480 strip. Portrait roots now fill the pinned body instead, and the pause/game-over overlay is anchored to the portrait layout.

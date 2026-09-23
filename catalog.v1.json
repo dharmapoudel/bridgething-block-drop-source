@@ -1,7 +1,7 @@
 {
   "$schema": "https://apps.bridgething.com/schemas/catalog/v1.json",
   "schema": "catalog.v1",
-  "updated_at": "2026-09-22T03:18:04.843Z",
+  "updated_at": "2026-09-23T21:05:31.333Z",
   "repo": {
     "name": "Block Drop",
     "description": "Block Drop for the Spotify Car Thing.",
@@ -23,6 +23,18 @@
       "homepage": "https://github.com/dharmapoudel/bridgething-block-drop",
       "source": "https://github.com/dharmapoudel/bridgething-block-drop",
       "versions": [
+        {
+          "version": "0.1.5",
+          "released_at": "2026-09-23T21:05:31.309Z",
+          "download": {
+            "url": "https://dharmapoudel.github.io/bridgething-block-drop-source/r/01a0989a-bd39-7de6-9314-16769a9163d7/0.1.5.zip",
+            "size": 900350,
+            "sha256": "5f91890ee35e862311d059c974d2ea788bfa30b62df561f56232b8afa7c376ff"
+          },
+          "permissions": [],
+          "min_libbridgething_version": "0.12.1",
+          "changelog": "- Fixed the portrait layout mispositioning on-device: the daemon's rotation script CSS-transforms the page but the body pin to 480x800 can lose a race, leaving h-full/w-full resolving against the 800x480 viewport. The app now pins the body to 480x800 itself in portrait mode (harmless when the daemon already did it).\n- Landscape (800x480) layout is unchanged."
+        },
         {
           "version": "0.1.4",
           "released_at": "2026-09-22T03:18:04.818Z",

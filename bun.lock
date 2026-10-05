@@ -12,7 +12,7 @@
     },
     "apps/block-drop": {
       "name": "bridgething-block-drop",
-      "version": "0.1.0",
+      "version": "0.1.6",
       "dependencies": {
         "@bridgething/client": "^0.12.1",
         "preact": "^10.29.7",

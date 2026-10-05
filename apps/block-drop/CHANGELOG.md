@@ -1,5 +1,11 @@
 # Block Drop
 
+## 0.1.6
+
+- Portrait mode (480x800), consolidated: the portrait fixes from 0.1.2-0.1.5 roll up here — detection via screen.orientation (the daemon pins the layout viewport at 800x480, so CSS orientation queries never fire), a vertical menu with the three mode cards stacked, a vertical game screen with the playfield on top and score/hold/next plus touch controls below, portrait roots filling the daemon-pinned body instead of the viewport, the pause/game-over overlay anchored to the portrait layout, and the app pinning the body to 480x800 itself to win the race against the daemon's rotation script.
+- Code cleanup: stripped non-essential comments (no behavior change).
+- Landscape (800x480) layout is unchanged.
+
 ## 0.1.5
 
 - Fixed the portrait layout mispositioning on-device: the daemon's rotation script CSS-transforms the page but the body pin to 480x800 can lose a race, leaving h-full/w-full resolving against the 800x480 viewport. The app now pins the body to 480x800 itself in portrait mode (harmless when the daemon already did it).
